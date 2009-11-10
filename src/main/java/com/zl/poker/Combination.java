@@ -9,7 +9,7 @@ class Combination {
     private List<Card> cards = new ArrayList<Card>();
     private List<Card> restCards = new ArrayList<Card>();
     
-    private int combinationType = -1;
+    private int combinationType = 0;
 
     private Combination() {
     }
@@ -17,7 +17,7 @@ class Combination {
     public Combination(List<Card> cardsSet)
     {
 
-	System.out.println("<>");
+	//	System.out.println("<>");
 
         int pairs_cnt = 0;
         int triples_cnt = 0;
@@ -33,10 +33,10 @@ class Combination {
                         pairs[cardsSet.get(i).getValue()]++; 
                     }
 		    if(!isFlashExists && cardsSet.get(i).getSuit() == cardsSet.get(j).getSuit()) {
-			System.out.println("! " + cardsSet.get(i).getSuit() + " " + cardsSet.get(j).getSuit());
+			//System.out.println("! " + cardsSet.get(i).getSuit() + " " + cardsSet.get(j).getSuit());
                         //pairs[cardsSet.get(i).getValue()]++; 
 			flash[cardsSet.get(i).getSuit()]++;
-			System.out.println("flash_cnt = " + flash[cardsSet.get(i).getSuit()]);
+			//System.out.println("flash_cnt = " + flash[cardsSet.get(i).getSuit()]);
                     }
                 }
             }
@@ -122,12 +122,19 @@ class Combination {
                 combinationType = 4;
             }
         }
-	System.out.println("CombinationType = " + combinationType);
-	if(combinationType  == 0) {
+	//	System.out.println("CombinationType = " + combinationType);
+	if(combinationType == 0) {
 	    for(int i = 0; i < flash.length; i++) {
+		//		System.out.println("flash = " + flash[i]);
 		if(flash[i] > 3)
 		{
 		    combinationType = 6;		
+		    for(int j = 0; j < cardsSet.size(); j++) {
+			if(cardsSet.get(j).getSuit() == flash[i]) {
+			    cards.add(cardsSet.get(j));			
+			}
+		    }
+		    break;
 		}    
 	    }
 	}
