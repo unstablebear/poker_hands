@@ -145,7 +145,7 @@ class Combination {
 	    }
 	} else if (combinationType.equals(CombinationType.STRAIGHT)) {
 	    System.out.println("###");
-	    if(checkForFlush(cards, 0, 0)) {
+	    if(checkForFlush(cards, 0)) {
 		combinationType = CombinationType.STRAIGHT_FLUSH;
 	    }
 	}
@@ -186,6 +186,68 @@ class Combination {
 	return true;
     }
 
-    //    private boolean checkForStraight(List<Card
+    /*    private List<List<Card>> getAllStraigths(List<Card> cardsList) {
+	List<List<Card>> result = new ArrayList<List<Card>>();
+
+	Collections.sort(cardsList);
+
+	boolean isAceExists = cardsList.get(0).getValue() == 14;
+	for(int i = 0; i < cardsList.size() - 5; i++) {
+	    	    if (checkForStraight(cardsList, i, isAceExists)) {
+		
+		    }
+	}
+
+	return
+    }*/
+
+    public static List<List<Card>> getStraightAtPosition(List<Card> cardsList, int start, boolean isAceExists) {
+	if(start > cardsList.size() - 5 || start < 0) {
+	    throw new IllegalArgumentException(String.format("start index = %s ; cards list size = %s", start, cardsList.size()));
+	}
+	boolean isStraight = false;
+	List<List<Card>> result = new ArrayList<List<Card>>();
+	List<Card> cl = new ArrayList<Card>();
+	result.add(cl);
+	int i = start;
+
+	while(i < start + 4) {
+	    int card1 = cardsList.get(i).getValue();
+	    int card2 = cardsList.get(i + 1).getValue();
+
+	    boolean isCurrentMoreByOneThanNext = card1 == card2 + 1;
+	    boolean isStraightHasMinorAce = isAceExists && card2 == 2 && i == start + 4;
+	    boolean isCurrentEqualsNext = card1 == card2;
+	    boolean isCurrentCardHasMoreThanOneFollowing = cardsList.size() > i + 1;
+
+	    if(isCurrentMoreByOneThanNext || isStraightHasMinorAce || (isCurrentEqualsNext))
+	    {
+		List<List<Card>> newAlternatives = new ArrayList<List<Card>>();
+		for(List<Card> lc : result) {
+		    if(card1 == card2) { // two equal values cards 
+
+			List<Card> newAlternative = new ArrayList<Card>();
+			newAlternative.addAll(lc);
+
+			lc.add(cardsList.get(i));
+
+			newAlternative.add(cardsList.get(i + 1));
+			newAlternatives.add(newAlternative);
+
+			start++;
+			i++;
+		    } else {
+			lc.add(cardsList.get(i));
+		    }
+		}
+		result.addAll(newAlternatives);
+		isStraight = true;
+	    } else {
+		isStraight = false;
+		break;
+	    }
+	}
+	return result;
+    }
 
 }
