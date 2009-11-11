@@ -65,7 +65,7 @@ public class PokerTest extends TestCase {
         rest_cards_exp.add(new Card(3, 5)); 
         rest_cards_exp.add(new Card(4, 3)); 
 
-        assertEquals(1, combination.getCombinationType());
+        assertEquals(CombinationType.PAIR, combination.getCombinationType());
         assertCardsArrays(cards_exp, combination.getCards());
         assertCardsArrays(rest_cards_exp, combination.getRestCards());
 
@@ -93,7 +93,7 @@ public class PokerTest extends TestCase {
         rest_cards_exp.add(new Card(4, 8));
         rest_cards_exp.add(new Card(3, 6)); 
 
-        assertEquals(2, combination.getCombinationType());
+        assertEquals(CombinationType.DOUBLE_PAIR, combination.getCombinationType());
         assertCardsArrays(cards_exp, combination.getCards());
         assertCardsArrays(rest_cards_exp, combination.getRestCards());
     }
@@ -120,7 +120,7 @@ public class PokerTest extends TestCase {
         rest_cards_exp.add(new Card(3, 6));
         rest_cards_exp.add(new Card(4, 2));
         
-        assertEquals(3, combination.getCombinationType());
+        assertEquals(CombinationType.TRIPLE, combination.getCombinationType());
         assertCardsArrays(cards_exp, combination.getCards());
         assertCardsArrays(rest_cards_exp, combination.getRestCards());
     }
@@ -147,7 +147,7 @@ public class PokerTest extends TestCase {
         List<Card> rest_cards_exp = new ArrayList<Card>();
         rest_cards_exp.add(new Card(1, 11)); 
         
-        assertEquals(4, combination.getCombinationType());
+        assertEquals(CombinationType.STRAIGHT, combination.getCombinationType());
         assertCardsArrays(cards_exp, combination.getCards());
         assertCardsArrays(rest_cards_exp, combination.getRestCards());
     }
@@ -174,7 +174,63 @@ public class PokerTest extends TestCase {
         List<Card> rest_cards_exp = new ArrayList<Card>();
         rest_cards_exp.add(new Card(3, 7)); 
         
-        assertEquals(4, combination.getCombinationType());
+        assertEquals(CombinationType.STRAIGHT, combination.getCombinationType());
+        assertCardsArrays(cards_exp, combination.getCards());
+        assertCardsArrays(rest_cards_exp, combination.getRestCards());
+
+    }
+
+    public void testGetCombinationFlush() {
+
+        List<Card> cards = new ArrayList<Card>();
+        cards.add(new Card(4, 4));
+        cards.add(new Card(4, 3));
+        cards.add(new Card(3, 8));
+        cards.add(new Card(4, 7));
+        cards.add(new Card(4, 2));
+        cards.add(new Card(4, 6));
+
+        Combination combination = testable.getCombination(cards);
+        
+        List<Card> cards_exp = new ArrayList<Card>();
+        cards_exp.add(new Card(4, 7));
+        cards_exp.add(new Card(4, 6)); 
+        cards_exp.add(new Card(4, 4)); 
+        cards_exp.add(new Card(4, 3));
+        cards_exp.add(new Card(4, 2));
+
+        List<Card> rest_cards_exp = new ArrayList<Card>();
+        rest_cards_exp.add(new Card(3, 8));
+        
+        assertEquals(CombinationType.FLUSH, combination.getCombinationType());
+        assertCardsArrays(cards_exp, combination.getCards());
+        assertCardsArrays(rest_cards_exp, combination.getRestCards());
+
+    }
+
+    public void testGetCombinationFullHounse() {
+
+        List<Card> cards = new ArrayList<Card>();
+        cards.add(new Card(2, 4));
+        cards.add(new Card(4, 4));
+        cards.add(new Card(3, 8));
+        cards.add(new Card(4, 7));
+        cards.add(new Card(4, 8));
+        cards.add(new Card(2, 8));
+
+        Combination combination = testable.getCombination(cards);
+        
+        List<Card> cards_exp = new ArrayList<Card>();
+        cards_exp.add(new Card(4, 8));
+        cards_exp.add(new Card(3, 8)); 
+        cards_exp.add(new Card(2, 8)); 
+        cards_exp.add(new Card(4, 4));
+        cards_exp.add(new Card(2, 4));
+
+        List<Card> rest_cards_exp = new ArrayList<Card>();
+        rest_cards_exp.add(new Card(4, 7));
+        
+        assertEquals(CombinationType.FULL_HOUSE, combination.getCombinationType());
         assertCardsArrays(cards_exp, combination.getCards());
         assertCardsArrays(rest_cards_exp, combination.getRestCards());
 
@@ -202,35 +258,35 @@ public class PokerTest extends TestCase {
         rest_cards_exp.add(new Card(3, 8));
         rest_cards_exp.add(new Card(4, 2));
         
-        assertEquals(5, combination.getCombinationType());
+        assertEquals(CombinationType.QUAD, combination.getCombinationType());
         assertCardsArrays(cards_exp, combination.getCards());
         assertCardsArrays(rest_cards_exp, combination.getRestCards());
 
     }
 
-    public void testGetCombinationFlash() {
+    public void testGetCombinationStraightFlush() {
 
         List<Card> cards = new ArrayList<Card>();
         cards.add(new Card(4, 4));
-        cards.add(new Card(4, 3));
-        cards.add(new Card(3, 8));
-        cards.add(new Card(4, 7));
-        cards.add(new Card(4, 2));
         cards.add(new Card(4, 6));
+        cards.add(new Card(2, 8));
+        cards.add(new Card(4, 7));
+        cards.add(new Card(4, 3));
+        cards.add(new Card(4, 5));
 
         Combination combination = testable.getCombination(cards);
         
         List<Card> cards_exp = new ArrayList<Card>();
         cards_exp.add(new Card(4, 7));
         cards_exp.add(new Card(4, 6)); 
-        cards_exp.add(new Card(4, 4)); 
+        cards_exp.add(new Card(4, 5)); 
+        cards_exp.add(new Card(4, 4));
         cards_exp.add(new Card(4, 3));
-        cards_exp.add(new Card(4, 2));
 
         List<Card> rest_cards_exp = new ArrayList<Card>();
-        rest_cards_exp.add(new Card(3, 8));
+        rest_cards_exp.add(new Card(2, 8));
         
-        assertEquals(6, combination.getCombinationType());
+        assertEquals(CombinationType.STRAIGHT_FLUSH, combination.getCombinationType());
         assertCardsArrays(cards_exp, combination.getCards());
         assertCardsArrays(rest_cards_exp, combination.getRestCards());
 
