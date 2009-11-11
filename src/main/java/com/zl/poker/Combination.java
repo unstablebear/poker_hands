@@ -21,117 +21,98 @@ class Combination {
 		int triples_cnt = 0;
 		int quad_cnt = 0;
 		int[] pairs = new int[15];
-		int[] flash = new int[5];
+		int[] flush = new int[5];
 
-		for (int i = 0; i < cardsSet.size(); i++) {
-			boolean isFlashExists = flash[cardsSet.get(i).getSuit()] > 0;
-			if (pairs[cardsSet.get(i).getValue()] == 0) {
-				for (int j = i + 1; j < cardsSet.size(); j++) {
-					if (cardsSet.get(i).getValue() == cardsSet.get(j)
-							.getValue()) {
+		List<Card> aces = getAces(cardsSet);		
+		
+		// Straights ?
+		Collections.sort(cardsSet);
+		List<List<Card>> straights = getAllStraihgts(cardsSet, aces);
+		if(straights.size() > 0) {
+			if(straights.size() > 1) {
+				List<Card> max = straights.get(0);
+				for(int i = 1; i < straights.size(); i++) {
+					int cmp = compareStraights(straights.get(i - 1), straights.get(i));
+					if(cmp < 0) {
+						max = straights.get(i);
+					}
+				}
+				cards = max;
+			} else {
+				cards = straights.get(0);
+			}
+			if(checkForFlush(cards, 0)) {
+				if(cards.get(4).getValue() == 10) {
+					combinationType = CombinationType.FLUSH_ROYAL;
+				} else {
+					combinationType = CombinationType.STRAIGHT_FLUSH;
+				}
+			} else {
+				combinationType = CombinationType.STRAIGHT;
+			}
+		}
+		
+		// Pairs ?
+		if(combinationType.val < CombinationType.QUAD.val) {
+			for (int i = 0; i < cardsSet.size(); i++) {
+				boolean isFlushExists = flush[cardsSet.get(i).getSuit()] > 0;
+				if (pairs[cardsSet.get(i).getValue()] == 0) {
+					for (int j = i + 1; j < cardsSet.size(); j++) {
+						if (cardsSet.get(i).getValue() == cardsSet.get(j)
+								.getValue()) {
 						// System.out.println("! " + cardsSet.get(i).getValue()
 						// + " " + cardsSet.get(j).getValue());
-						pairs[cardsSet.get(i).getValue()]++;
-					}
-					if (!isFlashExists
-							&& cardsSet.get(i).getSuit() == cardsSet.get(j)
+							pairs[cardsSet.get(i).getValue()]++;
+						}
+						if (!isFlushExists
+								&& cardsSet.get(i).getSuit() == cardsSet.get(j)
 									.getSuit()) {
 						// System.out.println("! " + cardsSet.get(i).getSuit() +
 						// " " + cardsSet.get(j).getSuit());
 						// pairs[cardsSet.get(i).getValue()]++;
-						flash[cardsSet.get(i).getSuit()]++;
+							flush[cardsSet.get(i).getSuit()]++;
 						// System.out.println("flash_cnt = " +
 						// flash[cardsSet.get(i).getSuit()]);
-					}
-				}
-			}
-		}
-
-		for (int i = 2; i < 15; i++) {
-			// System.out.println("? " + pairs[i] + " " + i);
-			switch (pairs[i]) {
-			case 1:
-				pairs_cnt++;
-				break;
-			case 2:
-				triples_cnt++;
-				break;
-			case 3:
-				quad_cnt++;
-				break;
-			default:
-				continue;
-			}
-			for (int j = 0; j < cardsSet.size(); j++) {
-				if (cardsSet.get(j).getValue() == i) {
-					cards.add(cardsSet.get(j));
-				}
-			}
-			if (triples_cnt > 0)
-				break;
-		}
-
-		if (quad_cnt == 1) {
-			combinationType = CombinationType.QUAD;
-		} else if (triples_cnt == 1) {
-			combinationType = CombinationType.TRIPLE;
-		} else if (pairs_cnt == 1) {
-			combinationType = CombinationType.PAIR;
-		} else if (pairs_cnt == 2) {
-			combinationType = CombinationType.DOUBLE_PAIR;
-		} else {
-			Collections.sort(cardsSet);
-			boolean isStraight = true;
-			int straightPosition = -1;
-			int edge = 5;
-			if (cardsSet.get(0).getValue() == 14) {
-				edge = 4;
-			}
-			for (int i = 0; i < cardsSet.size() - (edge - 1); i++) {
-
-				for (int j = i + 1; j < i + edge; j++) {
-					int k1 = cardsSet.get(j - 1).getValue();
-					int k2 = cardsSet.get(j).getValue();
-					// println
-					// ">> ${cardsSet.get(j - 1).getValue()} ${(cardsSet.get(j).getValue() + 1)} "
-					if (k1 != (k2 + 1)
-							&& !(cardsSet.get(0).getValue() == 14
-									&& cardsSet.get(i).getValue() != 14
-									&& k2 == 2 && j == i + 4)) {
-						// println
-						// "$k1 $k2 ?2 ${cardsSet.get(0).getValue()} ${cardsSet.get(i).getValue()} != 14 $j ${i + 4}"
-						isStraight = false;
-						break;
-					} else {
-						// println "?3"
-						if (k2 == 2) {
-							isStraight = true;
 						}
 					}
-					// println "1????"
 				}
-				if (isStraight) {
-					// println "!!!!"
-					straightPosition = i;
-					break;
-				}
-				// println "????"
 			}
-			if (isStraight) {
-				for (int i = 0; i < cardsSet.size(); i++) {
-					// println "> ${cardsSet.get(i)} > $straightPosition"
-					if (i >= straightPosition && i < straightPosition + 5) {
-						cards.add(cardsSet.get(i));
+
+			for (int i = 2; i < 15; i++) {
+				// System.out.println("? " + pairs[i] + " " + i);
+				switch (pairs[i]) {
+				case 1:
+					pairs_cnt++;
+					break;
+				case 2:
+					triples_cnt++;
+					break;
+				case 3:
+					quad_cnt++;
+					break;
+				default:
+					continue;
+				}
+				for (int j = 0; j < cardsSet.size(); j++) {
+					if (cardsSet.get(j).getValue() == i) {
+						cards.add(cardsSet.get(j));
 					}
 				}
-				if (edge == 4
-						&& cardsSet.get(straightPosition + (edge - 1))
-								.getValue() == 2)
-					cards.add(cardsSet.get(0));
-				combinationType = CombinationType.STRAIGHT;
+				if (triples_cnt > 0)
+					break;
+			}
+	
+			if (quad_cnt == 1) {
+				combinationType = CombinationType.QUAD;
+			} else if (triples_cnt == 1) {
+				combinationType = CombinationType.TRIPLE;
+			} else if (pairs_cnt == 1) {
+				combinationType = CombinationType.PAIR;
+			} else if (pairs_cnt == 2) {
+				combinationType = CombinationType.DOUBLE_PAIR;
 			}
 		}
-
+		
 		// проверка на full house
 		if (combinationType.val > 0
 				&& combinationType.val < CombinationType.FULL_HOUSE.val
@@ -141,25 +122,20 @@ class Combination {
 
 		// System.out.println("CombinationType = " + combinationType);
 		if (combinationType.equals(CombinationType.HIGH_CARD)) {
-			for (int i = 0; i < flash.length; i++) {
+			for (int i = 0; i < flush.length; i++) {
 				// System.out.println("flash = " + flash[i]);
-				if (flash[i] > 3) {
+				if (flush[i] > 3) {
 					combinationType = CombinationType.FLUSH;
 					for (int j = 0; j < cardsSet.size(); j++) {
-						if (cardsSet.get(j).getSuit() == flash[i]) {
+						if (cardsSet.get(j).getSuit() == flush[i]) {
 							cards.add(cardsSet.get(j));
 						}
 					}
 					break;
 				}
 			}
-		} else if (combinationType.equals(CombinationType.STRAIGHT)) {
-			System.out.println("###");
-			if (checkForFlush(cards, 0)) {
-				combinationType = CombinationType.STRAIGHT_FLUSH;
-			}
 		}
-
+		
 		if (combinationType.val > CombinationType.HIGH_CARD.val) {
 			for (int j = 0; j < cardsSet.size(); j++) {
 				if (!cards.contains(cardsSet.get(j))) {
@@ -169,6 +145,16 @@ class Combination {
 		}
 		Collections.sort(cards);
 		Collections.sort(restCards);
+	}
+
+	private List<Card> getAces(List<Card> cardsSet) {
+		List<Card> aces = new ArrayList<Card>();
+		for(int i = 0; i < cardsSet.size(); i++) {
+			if(cardsSet.get(i).getValue() == 14) {
+				aces.add(cardsSet.get(i));
+			}
+		}
+		return aces;
 	}
 
 	public CombinationType getCombinationType() {
@@ -183,7 +169,7 @@ class Combination {
 		return this.restCards;
 	}
 
-	private boolean checkForFlush(List<Card> cardsList, int start) {
+	private static boolean checkForFlush(List<Card> cardsList, int start) {
 		if (start < 0 || cardsList.size() - start < 5) {
 			throw new IllegalArgumentException(String.format(
 					"start index = %s ; cards list size = %s", start, cardsList
@@ -200,18 +186,16 @@ class Combination {
 		return true;
 	}
 
-	public static List<List<Card>> getAllStraihgts(List<Card> cardsList) {
+	public static List<List<Card>> getAllStraihgts(List<Card> cardsList, List<Card> aces) {
 		List<List<Card>> result = new ArrayList<List<Card>>();
 
-		List<Card> aces = new ArrayList<Card>();
-		for(int i = 0; i < cardsList.size(); i++) {
-			if(cardsList.get(i).getValue() == 14) {
-				aces.add(cardsList.get(i));
+		for(int i = 0; i < cardsList.size() - 4; i++) {
+			List<List<Card>> straights = getStraightAtPosition(cardsList, i, aces);
+			for (List<Card> list : straights) {
+				if(list.size() == 4 || list.size() == 5) {
+					result.add(list);	
+				}
 			}
-		}
-
-		for(int i = 0; i < cardsList.size() - 5; i++) {
-			result.addAll(getStraightAtPosition(cardsList, i, aces));
 		}
 		return result;
 	}
@@ -307,4 +291,73 @@ class Combination {
 		return result;
 	}
 
+	/*
+	 * Принимает на вход два списка со стритами. Если первый больше, возвращается положительное значение, если меньше -
+	 * отрицательное. Если стриты равны то возвращается 0.
+	 */
+	private static int compareStraights(List<Card> cl1, List<Card> cl2) {
+		int result = 0;
+		
+		boolean isFlush1 = checkForFlush(cl1, 0);
+		boolean isFlush2 = checkForFlush(cl1, 0);
+
+		boolean minorAce1 = (cl1.get(0).getValue() == 14 && cl1.get(4).getValue() == 2);
+		boolean minorAce2 = (cl2.get(0).getValue() == 14 && cl2.get(4).getValue() == 2);
+
+		int majorIdx1 = minorAce1 ? 1 : 0;
+		int majorIdx2 = minorAce1 ? 1 : 0;
+
+		int minorIdx1 = minorAce1 ? 0 : 4;
+		int minorIdx2 = minorAce2 ? 0 : 4;
+		
+		int minor1 = cl1.get(minorIdx1).getValue();
+		int minor2 = cl1.get(minorIdx2).getValue();
+		
+		int major1 = cl1.get(majorIdx1).getValue();
+		int major2 = cl1.get(majorIdx2).getValue();
+		
+		
+		if(!(isFlush1 || isFlush2)) {
+			result = major1 - major2; 
+			if(result == 0) {
+				for(int i = 0; i < 3; i++) {
+					result = cl1.get(majorIdx1 + i).getValue() - cl2.get(majorIdx2 + i).getValue();
+					if(result != 0) {
+						break;
+					}
+				}
+				if(result == 0) {
+					result = minor1 - minor2;
+					if(result == 0) {
+						result = cl1.get(majorIdx1).getSuit() - cl2.get(majorIdx2).getSuit();
+						if(result == 0) {
+							for(int i = 0; i < 3; i++) {
+								result = cl1.get(majorIdx1 + i).getSuit() - cl2.get(majorIdx2 + i).getSuit();
+								if(result != 0) {
+									break;
+								}
+							}
+						}
+						if(result == 0) {
+							result = cl1.get(minorIdx1).getSuit() - cl2.get(minorIdx2).getSuit();
+						}
+					}
+				}
+			}
+		} else if(isFlush1 && !isFlush2) {
+			result = 1;
+		} else if(!isFlush1 && isFlush2) {
+			result = -1;
+		} else {
+			if(minor1 == 10 && minor2 != 10) {
+				result = 1;
+			} else if(minor1 != 10 && minor2 == 10) {
+				result = -1;
+			} else {
+				result = cl1.get(0).getSuit() - cl2.get(0).getSuit();
+			}
+		} 
+		return result;
+	}
+	
 }
