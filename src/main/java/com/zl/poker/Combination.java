@@ -173,9 +173,6 @@ class Combination implements Comparable {
 							.size()));
 		}
 		for (int i = start + 1; i < start + 5; i++) {
-			System.out.println("CheckForFlush : "
-					+ cardsList.get(i - 1).getSuit() + " "
-					+ cardsList.get(i).getSuit());
 			if (cardsList.get(i - 1).getSuit() != cardsList.get(i).getSuit()) {
 				return false;
 			}

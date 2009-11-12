@@ -2,6 +2,7 @@ package com.zl.poker;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.zl.poker.Card;
 
 import junit.framework.TestCase;
 
