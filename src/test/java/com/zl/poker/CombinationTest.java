@@ -351,6 +351,146 @@ public class CombinationTest extends TestCase {
 		assertCardsArrays(cards_exp4, exp_list.get(3));
 		
 
+	}
+	
+	public void testCompareStraightsEqual() {
+
+		List<Card> straight1 = new ArrayList<Card>();
+		straight1.add(new Card(3, 6));
+		straight1.add(new Card(4, 5));
+		straight1.add(new Card(3, 4));
+		straight1.add(new Card(2, 3));
+		straight1.add(new Card(4, 2));
+
+		List<Card> straight2 = new ArrayList<Card>();
+		straight2.add(new Card(3, 6));
+		straight2.add(new Card(4, 5));
+		straight2.add(new Card(3, 4));
+		straight2.add(new Card(2, 3));
+		straight2.add(new Card(4, 2));
+
+		assertEquals(0, Combination.compareStraights(straight1, straight2));
+		
+	}
+
+	public void testCompareStraightsOneWithMinorAce() {
+
+		List<Card> straight1 = new ArrayList<Card>();
+		straight1.add(new Card(3, 14));
+		straight1.add(new Card(4, 5));
+		straight1.add(new Card(3, 4));
+		straight1.add(new Card(2, 3));
+		straight1.add(new Card(4, 2));
+
+		List<Card> straight2 = new ArrayList<Card>();
+		straight2.add(new Card(3, 6));
+		straight2.add(new Card(4, 5));
+		straight2.add(new Card(3, 4));
+		straight2.add(new Card(2, 3));
+		straight2.add(new Card(4, 2));
+
+		assertTrue(Combination.compareStraights(straight1, straight2) < 0);
+		
+	}	
+
+	public void testCompareStraightsOneIsFlush() {
+
+		List<Card> straight1 = new ArrayList<Card>();
+		straight1.add(new Card(3, 7));
+		straight1.add(new Card(4, 6));
+		straight1.add(new Card(3, 5));
+		straight1.add(new Card(2, 4));
+		straight1.add(new Card(4, 3));
+
+		List<Card> straight2 = new ArrayList<Card>();
+		straight2.add(new Card(4, 6));
+		straight2.add(new Card(4, 5));
+		straight2.add(new Card(4, 4));
+		straight2.add(new Card(4, 3));
+		straight2.add(new Card(4, 2));
+
+		assertTrue(Combination.compareStraights(straight1, straight2) < 0);
+		
+	}	
+	
+	public void testCompareStraightsTwoIsFlush() {
+
+		List<Card> straight1 = new ArrayList<Card>();
+		straight1.add(new Card(3, 6));
+		straight1.add(new Card(3, 5));
+		straight1.add(new Card(3, 4));
+		straight1.add(new Card(3, 3));
+		straight1.add(new Card(3, 2));
+
+		List<Card> straight2 = new ArrayList<Card>();
+		straight2.add(new Card(4, 6));
+		straight2.add(new Card(4, 5));
+		straight2.add(new Card(4, 4));
+		straight2.add(new Card(4, 3));
+		straight2.add(new Card(4, 2));
+
+		assertTrue(Combination.compareStraights(straight2, straight1) > 0);
+		
+	}	
+	
+	public void testCompareStraightsFlushAndRoyal() {
+
+		List<Card> straight1 = new ArrayList<Card>();
+		straight1.add(new Card(3, 14));
+		straight1.add(new Card(3, 13));
+		straight1.add(new Card(3, 12));
+		straight1.add(new Card(3, 11));
+		straight1.add(new Card(3, 10));
+
+		List<Card> straight2 = new ArrayList<Card>();
+		straight2.add(new Card(4, 6));
+		straight2.add(new Card(4, 5));
+		straight2.add(new Card(4, 4));
+		straight2.add(new Card(4, 3));
+		straight2.add(new Card(4, 2));
+
+		assertTrue(Combination.compareStraights(straight1, straight2) > 0);
+		
+	}	
+	
+	public void testCompareStraightsTwoRoyals() {
+
+		List<Card> straight1 = new ArrayList<Card>();
+		straight1.add(new Card(3, 14));
+		straight1.add(new Card(3, 13));
+		straight1.add(new Card(3, 12));
+		straight1.add(new Card(3, 11));
+		straight1.add(new Card(3, 10));
+
+		List<Card> straight2 = new ArrayList<Card>();
+		straight2.add(new Card(4, 14));
+		straight2.add(new Card(4, 13));
+		straight2.add(new Card(4, 12));
+		straight2.add(new Card(4, 11));
+		straight2.add(new Card(4, 10));
+
+		assertTrue(Combination.compareStraights(straight1, straight2) < 0);
+		
+	}	
+
+	public void testCompareStraightsOneIsRoyal() {
+
+		List<Card> straight1 = new ArrayList<Card>();
+		straight1.add(new Card(3, 14));
+		straight1.add(new Card(3, 13));
+		straight1.add(new Card(3, 12));
+		straight1.add(new Card(3, 11));
+		straight1.add(new Card(3, 10));
+
+		List<Card> straight2 = new ArrayList<Card>();
+		straight2.add(new Card(2, 14));
+		straight2.add(new Card(3, 13));
+		straight2.add(new Card(4, 12));
+		straight2.add(new Card(1, 11));
+		straight2.add(new Card(2, 10));
+
+		assertTrue(Combination.compareStraights(straight1, straight2) > 0);
+		
 	}	
 	
 	private void assertCardsArrays(List<Card> cards1, List<Card> cards2) {

@@ -52,7 +52,7 @@ class Combination {
 			}
 		}
 		
-		// Pairs ?
+		// Pairs, Triplets, Quads ?
 		if(combinationType.val < CombinationType.QUAD.val) {
 			for (int i = 0; i < cardsSet.size(); i++) {
 				boolean isFlushExists = flush[cardsSet.get(i).getSuit()] > 0;
@@ -295,26 +295,26 @@ class Combination {
 	 * Принимает на вход два списка со стритами. Если первый больше, возвращается положительное значение, если меньше -
 	 * отрицательное. Если стриты равны то возвращается 0.
 	 */
-	private static int compareStraights(List<Card> cl1, List<Card> cl2) {
+	public static int compareStraights(List<Card> cl1, List<Card> cl2) {
 		int result = 0;
 		
 		boolean isFlush1 = checkForFlush(cl1, 0);
-		boolean isFlush2 = checkForFlush(cl1, 0);
+		boolean isFlush2 = checkForFlush(cl2, 0);
 
 		boolean minorAce1 = (cl1.get(0).getValue() == 14 && cl1.get(4).getValue() == 2);
 		boolean minorAce2 = (cl2.get(0).getValue() == 14 && cl2.get(4).getValue() == 2);
 
 		int majorIdx1 = minorAce1 ? 1 : 0;
-		int majorIdx2 = minorAce1 ? 1 : 0;
+		int majorIdx2 = minorAce2 ? 1 : 0;
 
 		int minorIdx1 = minorAce1 ? 0 : 4;
 		int minorIdx2 = minorAce2 ? 0 : 4;
 		
 		int minor1 = cl1.get(minorIdx1).getValue();
-		int minor2 = cl1.get(minorIdx2).getValue();
+		int minor2 = cl2.get(minorIdx2).getValue();
 		
 		int major1 = cl1.get(majorIdx1).getValue();
-		int major2 = cl1.get(majorIdx2).getValue();
+		int major2 = cl2.get(majorIdx2).getValue();
 		
 		
 		if(!(isFlush1 || isFlush2)) {
