@@ -1,10 +1,10 @@
 package com.zl.poker;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collections;
 
-class Combination {
+class Combination implements Comparable {
 
 	private List<Card> cards = new ArrayList<Card>();
 	private List<Card> restCards = new ArrayList<Card>();
@@ -78,7 +78,7 @@ class Combination {
 				}
 			}
 
-			for (int i = 2; i < 15; i++) {
+			for (int i = 14; i >= 2; i--) {
 				// System.out.println("? " + pairs[i] + " " + i);
 				switch (pairs[i]) {
 				case 1:
@@ -98,7 +98,7 @@ class Combination {
 						cards.add(cardsSet.get(j));
 					}
 				}
-				if (triples_cnt > 0)
+				if ((triples_cnt > 0 && pairs_cnt > 0) || quad_cnt > 0)
 					break;
 			}
 	
@@ -170,6 +170,10 @@ class Combination {
 		return this.restCards;
 	}
 
+	public List<Card> getAllCards() {
+		return new ArrayList() {{ addAll(cards); addAll(restCards); }};
+	}
+	
 	// проверить список карт на совпадающие масти(флеш) с заданной позиции
 	private static boolean checkForFlush(List<Card> cardsList, int start) {
 		if (start < 0 || cardsList.size() - start < 5) {
@@ -369,6 +373,63 @@ class Combination {
 				result = cl1.get(0).getSuit() - cl2.get(0).getSuit();
 			}
 		} 
+		return result;
+	}
+
+	public int compareTo(Object other) {
+        if (!(other instanceof Combination)) {
+            throw new ClassCastException("A Combination object expected.");
+        }
+        
+        Combination otherCombination = (Combination) other;
+		int result = this.getCombinationType().val - otherCombination.getCombinationType().val;
+		
+        if(result != 0) {
+        	return result;
+        } else {
+        	switch(this.getCombinationType()) {
+        	case HIGH_CARD:
+        		return compareHandsByOrder(this.getCards(), otherCombination.getCards());
+        	case PAIR:
+        		return compareHandsByOrder(this.getAllCards(), otherCombination.getAllCards());
+        	case DOUBLE_PAIR:
+        		return compareHandsByOrder(this.getAllCards(), otherCombination.getAllCards());
+        	case TRIPLE:
+        		return compareHandsByOrder(this.getAllCards(), otherCombination.getAllCards());
+        	case STRAIGHT:
+        		return compareStraights(this.getCards(), otherCombination.getCards());
+        	case FLUSH:
+        		return compareHandsByOrder(this.getAllCards(), otherCombination.getAllCards());
+        	case FULL_HOUSE:
+        		return compareHandsByOrder(this.getAllCards(), otherCombination.getAllCards());
+        	case QUAD:
+        		return compareHandsByOrder(this.getAllCards(), otherCombination.getAllCards());
+        	case STRAIGHT_FLUSH:
+        		return compareStraights(this.getCards(), otherCombination.getCards());
+        	case FLUSH_ROYAL:
+        		return compareStraights(this.getCards(), otherCombination.getCards());
+        	default:
+        		throw new IllegalArgumentException(String.format("Unknown CombinationType %s .", this.getCombinationType().val));
+        	}
+        }
+	}
+	
+	/*
+	 * Сравнивает руки от старшей карты к младшей. 
+	 * Руки должны быть отсортированы по убыванию ранга карты. 
+	 */
+	public static int compareHandsByOrder(List<Card> cl1, List<Card> cl2) {
+		int result = 0;
+		if(cl1.size() != cl2.size()) {
+			throw new IllegalArgumentException(String.format("List must be of one size. cl1.size = %s, cl2.size = %s", 
+					cl1.size(), cl2.size()));
+		}
+		for(int i = 0; i < cl1.size(); i++) {
+			result = cl1.get(i).getValue() - cl2.get(i).getValue();
+			if(result != 0) {
+				break;
+			}
+		}
 		return result;
 	}
 	

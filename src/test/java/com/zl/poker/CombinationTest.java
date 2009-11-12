@@ -493,6 +493,65 @@ public class CombinationTest extends TestCase {
 		
 	}	
 	
+	public void testCompareHandsByOrder() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(3, 14));
+		cards_list1.add(new Card(3, 13));
+		cards_list1.add(new Card(3, 11));
+		cards_list1.add(new Card(3, 3));
+		cards_list1.add(new Card(3, 2));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(2, 14));
+		cards_list2.add(new Card(3, 13));
+		cards_list2.add(new Card(4, 12));
+		cards_list2.add(new Card(1, 4));
+		cards_list2.add(new Card(2, 3));
+
+		assertTrue(Combination.compareHandsByOrder(cards_list1, cards_list2) < 0);
+		
+	}	
+
+	public void testCompareHandsByOrder2() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(3, 14));
+		cards_list1.add(new Card(3, 13));
+		cards_list1.add(new Card(3, 12));
+		cards_list1.add(new Card(3, 3));
+		cards_list1.add(new Card(3, 2));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(2, 14));
+		cards_list2.add(new Card(3, 13));
+		cards_list2.add(new Card(4, 12));
+		cards_list2.add(new Card(1, 3));
+		cards_list2.add(new Card(2, 3));
+
+		assertTrue(Combination.compareHandsByOrder(cards_list1, cards_list2) < 0);
+		
+	}	
+	
+	public void testCompareHandsByOrderEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(3, 14));
+		cards_list1.add(new Card(3, 13));
+		cards_list1.add(new Card(3, 12));
+		cards_list1.add(new Card(3, 3));
+		cards_list1.add(new Card(3, 3));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(2, 14));
+		cards_list2.add(new Card(3, 13));
+		cards_list2.add(new Card(4, 12));
+		cards_list2.add(new Card(1, 3));
+		cards_list2.add(new Card(2, 3));
+
+		assertEquals(0, Combination.compareHandsByOrder(cards_list1, cards_list2));
+		
+	}	
 	private void assertCardsArrays(List<Card> cards1, List<Card> cards2) {
 		assertEquals(cards1.size(), cards2.size());
 		for (int i = 0; i < cards1.size(); i++) {
