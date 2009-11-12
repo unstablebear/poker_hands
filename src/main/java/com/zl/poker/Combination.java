@@ -147,6 +147,7 @@ class Combination {
 		Collections.sort(restCards);
 	}
 
+	// возвращает список тузов в списке карт
 	private List<Card> getAces(List<Card> cardsSet) {
 		List<Card> aces = new ArrayList<Card>();
 		for(int i = 0; i < cardsSet.size(); i++) {
@@ -169,6 +170,7 @@ class Combination {
 		return this.restCards;
 	}
 
+	// проверить список карт на совпадающие масти(флеш) с заданной позиции
 	private static boolean checkForFlush(List<Card> cardsList, int start) {
 		if (start < 0 || cardsList.size() - start < 5) {
 			throw new IllegalArgumentException(String.format(
@@ -200,6 +202,9 @@ class Combination {
 		return result;
 	}
 
+	/* 
+	 * Возвращает список стритов начинающихся с заданной позиции из комбинации карт. 
+	 */
 	public static List<List<Card>> getStraightAtPosition(List<Card> cardsList,
 			int start, List<Card> aces) {
 		if (start > cardsList.size() - 5 || start < 0) {
@@ -228,7 +233,9 @@ class Combination {
 				}
 				int ii = i;
 				for (List<Card> lc : result) {
-					if (card1 == card2) { // two equal values cards
+					// если встречаем две(или больше) одинаковые по рангу карты подряд, значит нужно разбить существующие
+					// стриты на варианты с этими картами
+					if (card1 == card2) {
 						int k = i + 1;
 						while(k < cardsList.size()) {
 							if (cardsList.get(i).getValue() == cardsList.get(k).getValue()) {
@@ -252,6 +259,7 @@ class Combination {
 				result.addAll(newAlternatives);
 				isStraight = true;
 				i++;
+				// мы в последней позиции списка карт, может нужно добавить последнюю в стриты 
 				if(i + 1 == cardsList.size()) {
 					if(cardsList.get(i).getValue() + 1 == cardsList.get(i - 1).getValue()) {
 						for (List<Card> lc : result) {
@@ -261,17 +269,21 @@ class Combination {
 					break;
 				}
 			} else {
-				if(!isCurrentIsBrokenFirstButAceExists) {
+				// первая карта нарушает стрит, но может последняя - 2 и существует туз
+				if(isCurrentIsBrokenFirstButAceExists) {
+					i++;
+				} else {
 					isStraight = false;	
 					break;
-				} else {
-					i++;
 				}
 			}
 		}
 		if(!isStraight) {
 			result.clear();
 		}
+		
+		// при необходимости нужно докинуть тузов в неполные стриты с младшей двойкой и 
+		// удалить неполные стриты из списка результатов
 		List<List<Card>> modified = new ArrayList<List<Card>>();
 		List<List<Card>> withAces = new ArrayList<List<Card>>();
 		for(Card ace : aces) {
