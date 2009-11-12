@@ -265,6 +265,9 @@ class Combination implements Comparable {
 				result.addAll(newAlternatives);
 				isStraight = true;
 				i++;
+				if(i - 2 > 0 && (cardsList.get(i - 2).getValue() - cardsList.get(i - 1).getValue() > 1)) {
+					break;
+				}	
 				// мы в последней позиции списка карт, может нужно добавить последнюю в стриты 
 				if(i + 1 == cardsList.size()) {
 					if(cardsList.get(i).getValue() + 1 == cardsList.get(i - 1).getValue()) {
