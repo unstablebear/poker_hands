@@ -413,7 +413,7 @@ public class CombinationTest extends TestCase {
 		
 	}	
 	
-	public void testCompareStraightsTwoIsFlush() {
+	public void testCompareStraightsTwoFlushes() {
 
 		List<Card> straight1 = new ArrayList<Card>();
 		straight1.add(new Card(3, 6));
@@ -552,6 +552,505 @@ public class CombinationTest extends TestCase {
 		assertEquals(0, Combination.compareHandsByOrder(cards_list1, cards_list2));
 		
 	}	
+
+	public void testCompareCombinationsHighCardsNotEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(2, 14));
+		cards_list1.add(new Card(3, 13));
+		cards_list1.add(new Card(4, 12));
+		cards_list1.add(new Card(1, 3));
+		cards_list1.add(new Card(2, 2));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(2, 14));
+		cards_list2.add(new Card(3, 13));
+		cards_list2.add(new Card(4, 11));
+		cards_list2.add(new Card(1, 3));
+		cards_list2.add(new Card(2, 2));
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+		
+		assertEquals(CombinationType.HIGH_CARD, c1.getCombinationType());
+		assertEquals(CombinationType.HIGH_CARD, c2.getCombinationType());
+		assertTrue(c1.compareTo(c2) > 0);
+		
+	}	
+	
+	public void testCompareCombinationsPairsNotEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(3, 14));
+		cards_list1.add(new Card(2, 11));
+		cards_list1.add(new Card(3, 11));
+		cards_list1.add(new Card(3, 3));
+		cards_list1.add(new Card(3, 2));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(2, 14));
+		cards_list2.add(new Card(3, 12));
+		cards_list2.add(new Card(4, 12));
+		cards_list2.add(new Card(1, 3));
+		cards_list2.add(new Card(2, 2));
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+		
+		assertEquals(CombinationType.PAIR, c1.getCombinationType());
+		assertEquals(CombinationType.PAIR, c2.getCombinationType());
+		assertTrue(c1.compareTo(c2) < 0);
+		
+	}	
+
+	public void testCompareCombinationsTwoPairsNotEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(3, 14));
+		cards_list1.add(new Card(2, 12));
+		cards_list1.add(new Card(3, 12));
+		cards_list1.add(new Card(3, 3));
+		cards_list1.add(new Card(3, 3));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(2, 14));
+		cards_list2.add(new Card(3, 12));
+		cards_list2.add(new Card(4, 12));
+		cards_list2.add(new Card(1, 2));
+		cards_list2.add(new Card(2, 2));
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+		
+		assertEquals(CombinationType.DOUBLE_PAIR, c1.getCombinationType());
+		assertEquals(CombinationType.DOUBLE_PAIR, c2.getCombinationType());
+		assertTrue(c1.compareTo(c2) > 0);
+	}
+	
+	public void testCompareCombinationsTripletsNotEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(3, 14));
+		cards_list1.add(new Card(3, 11));
+		cards_list1.add(new Card(2, 11));
+		cards_list1.add(new Card(1, 11));
+		cards_list1.add(new Card(3, 3));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(2, 14));
+		cards_list2.add(new Card(3, 12));
+		cards_list2.add(new Card(4, 12));
+		cards_list2.add(new Card(1, 12));
+		cards_list2.add(new Card(2, 3));
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+		
+		assertEquals(CombinationType.TRIPLE, c1.getCombinationType());
+		assertEquals(CombinationType.TRIPLE, c2.getCombinationType());
+		assertTrue(c1.compareTo(c2) < 0);
+		
+	}	
+	
+	public void testCompareCombinationsStraightNotEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(3, 14));
+		cards_list1.add(new Card(4, 13));
+		cards_list1.add(new Card(3, 12));
+		cards_list1.add(new Card(2, 11));
+		cards_list1.add(new Card(3, 10));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(3, 14));
+		cards_list2.add(new Card(4, 5));
+		cards_list2.add(new Card(3, 4));
+		cards_list2.add(new Card(2, 3));
+		cards_list2.add(new Card(3, 2));
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+		
+		assertEquals(CombinationType.STRAIGHT, c1.getCombinationType());
+		assertEquals(CombinationType.STRAIGHT, c2.getCombinationType());
+		assertTrue(c1.compareTo(c2) > 0);
+		
+	}	
+	
+	public void testCompareCombinationsFlushesNotEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(2, 12));
+		cards_list1.add(new Card(2, 11));
+		cards_list1.add(new Card(2, 10));
+		cards_list1.add(new Card(2, 9));
+		cards_list1.add(new Card(2, 7));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(3, 13));
+		cards_list2.add(new Card(3, 12));
+		cards_list2.add(new Card(3, 11));
+		cards_list2.add(new Card(3, 10));
+		cards_list2.add(new Card(3, 7));
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+
+		assertEquals(CombinationType.FLUSH, c1.getCombinationType());
+		assertEquals(CombinationType.FLUSH, c2.getCombinationType());
+		assertTrue(c1.compareTo(c2) < 0);
+		
+	}
+	
+	public void testCompareCombinationsFullHouseNotEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(3, 14));
+		cards_list1.add(new Card(2, 14));
+		cards_list1.add(new Card(4, 14));
+		cards_list1.add(new Card(2, 10));
+		cards_list1.add(new Card(1, 10));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(3, 14));
+		cards_list2.add(new Card(2, 14));
+		cards_list2.add(new Card(3, 14));
+		cards_list2.add(new Card(3, 9));
+		cards_list2.add(new Card(3, 9));
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+
+		assertEquals(CombinationType.FULL_HOUSE, c1.getCombinationType());
+		assertEquals(CombinationType.FULL_HOUSE, c2.getCombinationType());
+		assertTrue(c1.compareTo(c2) > 0);
+		
+	}
+	
+	public void testCompareCombinationsQuadsNotEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(3, 14));
+		cards_list1.add(new Card(4, 11));
+		cards_list1.add(new Card(3, 11));
+		cards_list1.add(new Card(2, 11));
+		cards_list1.add(new Card(1, 11));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(2, 14));
+		cards_list2.add(new Card(4, 12));
+		cards_list2.add(new Card(3, 12));
+		cards_list2.add(new Card(2, 12));
+		cards_list2.add(new Card(1, 12));
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+		
+		assertEquals(CombinationType.QUAD, c1.getCombinationType());
+		assertEquals(CombinationType.QUAD, c2.getCombinationType());
+		assertTrue(c1.compareTo(c2) < 0);
+		
+	}
+
+	public void testCompareCombinationsStraightFlushNotEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(4, 13));
+		cards_list1.add(new Card(4, 12));
+		cards_list1.add(new Card(4, 11));
+		cards_list1.add(new Card(4, 10));
+		cards_list1.add(new Card(4, 9));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(4, 11));
+		cards_list2.add(new Card(4, 10));
+		cards_list2.add(new Card(4, 9));
+		cards_list2.add(new Card(4, 8));
+		cards_list2.add(new Card(4, 7));
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+
+		assertEquals(CombinationType.STRAIGHT_FLUSH, c1.getCombinationType());
+		assertEquals(CombinationType.STRAIGHT_FLUSH, c2.getCombinationType());
+		assertTrue(c1.compareTo(c2) > 0);
+		
+	}
+	
+	public void testCompareCombinationsFlushRoyalNotEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(3, 14));
+		cards_list1.add(new Card(3, 13));
+		cards_list1.add(new Card(3, 12));
+		cards_list1.add(new Card(3, 11));
+		cards_list1.add(new Card(3, 10));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(4, 14));
+		cards_list2.add(new Card(4, 13));
+		cards_list2.add(new Card(4, 12));
+		cards_list2.add(new Card(4, 11));
+		cards_list2.add(new Card(4, 10));
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+
+		assertEquals(CombinationType.FLUSH_ROYAL, c1.getCombinationType());
+		assertEquals(CombinationType.FLUSH_ROYAL, c2.getCombinationType());
+		assertTrue(c1.compareTo(c2) < 0);
+		
+	}
+
+	public void testCompareCombinationsHighCardsEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(2, 14));
+		cards_list1.add(new Card(3, 13));
+		cards_list1.add(new Card(4, 12));
+		cards_list1.add(new Card(1, 3));
+		cards_list1.add(new Card(2, 2));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(2, 14));
+		cards_list2.add(new Card(3, 13));
+		cards_list2.add(new Card(4, 12));
+		cards_list2.add(new Card(1, 3));
+		cards_list2.add(new Card(2, 2));
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+		
+		assertEquals(CombinationType.HIGH_CARD, c1.getCombinationType());
+		assertEquals(CombinationType.HIGH_CARD, c2.getCombinationType());
+		assertEquals(0, c1.compareTo(c2));
+		
+	}	
+	
+	public void testCompareCombinationsPairsEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(3, 14));
+		cards_list1.add(new Card(2, 12));
+		cards_list1.add(new Card(3, 12));
+		cards_list1.add(new Card(3, 3));
+		cards_list1.add(new Card(3, 2));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(2, 14));
+		cards_list2.add(new Card(3, 12));
+		cards_list2.add(new Card(4, 12));
+		cards_list2.add(new Card(1, 3));
+		cards_list2.add(new Card(2, 2));
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+		
+		assertEquals(CombinationType.PAIR, c1.getCombinationType());
+		assertEquals(CombinationType.PAIR, c2.getCombinationType());
+		assertEquals(0, c1.compareTo(c2));
+		
+	}	
+
+	public void testCompareCombinationsTwoPairsEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(3, 14));
+		cards_list1.add(new Card(2, 12));
+		cards_list1.add(new Card(3, 12));
+		cards_list1.add(new Card(3, 3));
+		cards_list1.add(new Card(3, 3));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(2, 14));
+		cards_list2.add(new Card(3, 12));
+		cards_list2.add(new Card(4, 12));
+		cards_list2.add(new Card(1, 3));
+		cards_list2.add(new Card(2, 3));
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+		
+		assertEquals(CombinationType.DOUBLE_PAIR, c1.getCombinationType());
+		assertEquals(CombinationType.DOUBLE_PAIR, c2.getCombinationType());
+		assertEquals(0, c1.compareTo(c2));
+	}
+	
+	public void testCompareCombinationsTripletsEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(3, 14));
+		cards_list1.add(new Card(3, 12));
+		cards_list1.add(new Card(2, 12));
+		cards_list1.add(new Card(1, 12));
+		cards_list1.add(new Card(3, 3));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(2, 14));
+		cards_list2.add(new Card(3, 12));
+		cards_list2.add(new Card(4, 12));
+		cards_list2.add(new Card(1, 12));
+		cards_list2.add(new Card(2, 3));
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+		
+		assertEquals(CombinationType.TRIPLE, c1.getCombinationType());
+		assertEquals(CombinationType.TRIPLE, c2.getCombinationType());
+		assertEquals(0, c1.compareTo(c2));
+		
+	}	
+	
+	public void testCompareCombinationsStraightEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(3, 14));
+		cards_list1.add(new Card(4, 13));
+		cards_list1.add(new Card(3, 12));
+		cards_list1.add(new Card(2, 11));
+		cards_list1.add(new Card(3, 10));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(3, 14));
+		cards_list2.add(new Card(4, 13));
+		cards_list2.add(new Card(3, 12));
+		cards_list2.add(new Card(2, 11));
+		cards_list2.add(new Card(3, 10));
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+		
+		assertEquals(CombinationType.STRAIGHT, c1.getCombinationType());
+		assertEquals(CombinationType.STRAIGHT, c2.getCombinationType());
+		assertEquals(0, c1.compareTo(c2));
+		
+	}	
+	
+	public void testCompareCombinationsFlushesEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(3, 13));
+		cards_list1.add(new Card(3, 12));
+		cards_list1.add(new Card(3, 11));
+		cards_list1.add(new Card(3, 10));
+		cards_list1.add(new Card(3, 8));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(3, 13));
+		cards_list2.add(new Card(3, 12));
+		cards_list2.add(new Card(3, 11));
+		cards_list2.add(new Card(3, 10));
+		cards_list2.add(new Card(3, 8));
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+
+		assertEquals(CombinationType.FLUSH, c1.getCombinationType());
+		assertEquals(CombinationType.FLUSH, c2.getCombinationType());
+		assertEquals(0, c1.compareTo(c2));
+		
+	}
+	
+	public void testCompareCombinationsFullHouseEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(3, 14));
+		cards_list1.add(new Card(2, 14));
+		cards_list1.add(new Card(4, 14));
+		cards_list1.add(new Card(2, 10));
+		cards_list1.add(new Card(1, 10));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(3, 14));
+		cards_list2.add(new Card(2, 14));
+		cards_list2.add(new Card(3, 14));
+		cards_list2.add(new Card(3, 10));
+		cards_list2.add(new Card(3, 10));
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+
+		assertEquals(CombinationType.FULL_HOUSE, c1.getCombinationType());
+		assertEquals(CombinationType.FULL_HOUSE, c2.getCombinationType());
+		assertEquals(0, c1.compareTo(c2));
+		
+	}
+	
+	public void testCompareCombinationsQuadsEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(3, 14));
+		cards_list1.add(new Card(4, 12));
+		cards_list1.add(new Card(3, 12));
+		cards_list1.add(new Card(2, 12));
+		cards_list1.add(new Card(1, 12));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(2, 14));
+		cards_list2.add(new Card(4, 12));
+		cards_list2.add(new Card(3, 12));
+		cards_list2.add(new Card(2, 12));
+		cards_list2.add(new Card(1, 12));
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+		
+		assertEquals(CombinationType.QUAD, c1.getCombinationType());
+		assertEquals(CombinationType.QUAD, c2.getCombinationType());
+		assertEquals(0, c1.compareTo(c2));
+		
+	}
+
+	public void testCompareCombinationsStraightFlushEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(4, 13));
+		cards_list1.add(new Card(4, 12));
+		cards_list1.add(new Card(4, 11));
+		cards_list1.add(new Card(4, 10));
+		cards_list1.add(new Card(4, 9));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(4, 13));
+		cards_list2.add(new Card(4, 12));
+		cards_list2.add(new Card(4, 11));
+		cards_list2.add(new Card(4, 10));
+		cards_list2.add(new Card(4, 9));
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+
+		assertEquals(CombinationType.STRAIGHT_FLUSH, c1.getCombinationType());
+		assertEquals(CombinationType.STRAIGHT_FLUSH, c2.getCombinationType());
+		assertEquals(0, c1.compareTo(c2));
+		
+	}
+	
+	public void testCompareCombinationsFlushRoyalEquals() {
+
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(4, 14));
+		cards_list1.add(new Card(4, 13));
+		cards_list1.add(new Card(4, 12));
+		cards_list1.add(new Card(4, 11));
+		cards_list1.add(new Card(4, 10));
+
+		List<Card> cards_list2 = new ArrayList<Card>();
+		cards_list2.add(new Card(4, 14));
+		cards_list2.add(new Card(4, 13));
+		cards_list2.add(new Card(4, 12));
+		cards_list2.add(new Card(4, 11));
+		cards_list2.add(new Card(4, 10));
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+
+		assertEquals(CombinationType.FLUSH_ROYAL, c1.getCombinationType());
+		assertEquals(CombinationType.FLUSH_ROYAL, c2.getCombinationType());
+		assertEquals(0, c1.compareTo(c2));
+		
+	}
+	
 	private void assertCardsArrays(List<Card> cards1, List<Card> cards2) {
 		assertEquals(cards1.size(), cards2.size());
 		for (int i = 0; i < cards1.size(); i++) {

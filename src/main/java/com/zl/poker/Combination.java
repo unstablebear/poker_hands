@@ -142,6 +142,8 @@ class Combination implements Comparable {
 					restCards.add(cardsSet.get(j));
 				}
 			}
+		} else {
+			restCards.addAll(cardsSet);
 		}
 		Collections.sort(cards);
 		Collections.sort(restCards);
@@ -221,7 +223,7 @@ class Combination implements Comparable {
 		result.add(new ArrayList<Card>());
 		int i = start;
 
-		while (i < start + 5) {
+		while (i < start + 5 && i < cardsList.size()) {
 			int card1 = cardsList.get(i).getValue();
 			int card2 = cardsList.get(i + 1).getValue();
 
@@ -365,11 +367,16 @@ class Combination implements Comparable {
 		} else if(!isFlush1 && isFlush2) {
 			result = -1;
 		} else {
-			if(minor1 == 10 && minor2 != 10) {
-				result = 1;
-			} else if(minor1 != 10 && minor2 == 10) {
-				result = -1;
-			} else {
+			result = major1 - major2;
+//			if(minor1 == 10 || minor2 == 10) {
+//				if(minor1 == 10 && minor2 != 10) {
+//					result = 1;
+//				} else if(minor1 != 10 && minor2 == 10) {
+//					result = -1;
+//				}
+//			}
+			if(result == 0) {
+				// если флэш-стриты равны сравниваем по масти
 				result = cl1.get(0).getSuit() - cl2.get(0).getSuit();
 			}
 		} 
@@ -389,7 +396,7 @@ class Combination implements Comparable {
         } else {
         	switch(this.getCombinationType()) {
         	case HIGH_CARD:
-        		return compareHandsByOrder(this.getCards(), otherCombination.getCards());
+        		return compareHandsByOrder(this.getRestCards(), otherCombination.getRestCards());
         	case PAIR:
         		return compareHandsByOrder(this.getAllCards(), otherCombination.getAllCards());
         	case DOUBLE_PAIR:
