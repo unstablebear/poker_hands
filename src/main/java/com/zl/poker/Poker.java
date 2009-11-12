@@ -1,8 +1,7 @@
 package com.zl.poker;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 class Poker {
     
@@ -10,8 +9,12 @@ class Poker {
         Collections.sort(cards);
     }
 
-    public Combination getCombination(List<Card> cards) {
+    public Combination createCombination(List<Card> cards) {
         return new Combination(cards);
+    }
+    
+    public int compareCombinations(Combination c1, Combination c2) {
+    	return c1.compareTo(c2);
     }
 
 }

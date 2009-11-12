@@ -1,8 +1,5 @@
 package com.zl.poker;
 
-import java.util.List;
-import java.util.ArrayList;
-
 class Card implements Comparable {
 
     private int suit;

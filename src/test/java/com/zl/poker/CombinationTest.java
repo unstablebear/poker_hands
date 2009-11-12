@@ -1279,7 +1279,6 @@ public class CombinationTest extends TestCase {
 	private void assertCardsArrays(List<Card> cards1, List<Card> cards2) {
 		assertEquals(cards1.size(), cards2.size());
 		for (int i = 0; i < cards1.size(); i++) {
-			// println "${cards1.get(i)} ${cards2.get(i)}"
 			assertEquals(cards1.get(i), cards2.get(i));
 		}
 	}

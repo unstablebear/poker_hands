@@ -1,11 +1,9 @@
 package com.zl.poker;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+
+import junit.framework.TestCase;
 
 public class PokerTest extends TestCase {
 
@@ -53,7 +51,7 @@ public class PokerTest extends TestCase {
         cards.add(new Card(3, 6));
         cards.add(new Card(4, 2));
 
-        Combination combination = testable.getCombination(cards);
+        Combination combination = testable.createCombination(cards);
         
         List<Card> cards_exp = new ArrayList<Card>();
         cards_exp.add(new Card(4, 2));
@@ -81,7 +79,7 @@ public class PokerTest extends TestCase {
         cards.add(new Card(3, 6));
         cards.add(new Card(1, 2));
 
-        Combination combination = testable.getCombination(cards);
+        Combination combination = testable.createCombination(cards);
         
         List<Card> cards_exp = new ArrayList<Card>();
         cards_exp.add(new Card(4, 3));
@@ -108,7 +106,7 @@ public class PokerTest extends TestCase {
         cards.add(new Card(3, 6));
         cards.add(new Card(1, 3));
 
-        Combination combination = testable.getCombination(cards);
+        Combination combination = testable.createCombination(cards);
         
         List<Card> cards_exp = new ArrayList<Card>();
         cards_exp.add(new Card(4, 3));
@@ -135,7 +133,7 @@ public class PokerTest extends TestCase {
         cards.add(new Card(4, 3));
         cards.add(new Card(1, 11));
 
-        Combination combination = testable.getCombination(cards);
+        Combination combination = testable.createCombination(cards);
         
         List<Card> cards_exp = new ArrayList<Card>();
         cards_exp.add(new Card(4, 6));
@@ -162,7 +160,7 @@ public class PokerTest extends TestCase {
         cards.add(new Card(4, 2));
         cards.add(new Card(1, 14));
 
-        Combination combination = testable.getCombination(cards);
+        Combination combination = testable.createCombination(cards);
         
         List<Card> cards_exp = new ArrayList<Card>();
         cards_exp.add(new Card(1, 14));
@@ -190,7 +188,7 @@ public class PokerTest extends TestCase {
         cards.add(new Card(4, 2));
         cards.add(new Card(4, 6));
 
-        Combination combination = testable.getCombination(cards);
+        Combination combination = testable.createCombination(cards);
         
         List<Card> cards_exp = new ArrayList<Card>();
         cards_exp.add(new Card(4, 7));
@@ -218,7 +216,7 @@ public class PokerTest extends TestCase {
         cards.add(new Card(4, 8));
         cards.add(new Card(2, 8));
 
-        Combination combination = testable.getCombination(cards);
+        Combination combination = testable.createCombination(cards);
         
         List<Card> cards_exp = new ArrayList<Card>();
         cards_exp.add(new Card(4, 8));
@@ -246,7 +244,7 @@ public class PokerTest extends TestCase {
         cards.add(new Card(4, 2));
         cards.add(new Card(1, 7));
 
-        Combination combination = testable.getCombination(cards);
+        Combination combination = testable.createCombination(cards);
         
         List<Card> cards_exp = new ArrayList<Card>();
         cards_exp.add(new Card(4, 7));
@@ -274,7 +272,7 @@ public class PokerTest extends TestCase {
         cards.add(new Card(4, 3));
         cards.add(new Card(4, 5));
 
-        Combination combination = testable.getCombination(cards);
+        Combination combination = testable.createCombination(cards);
         
         List<Card> cards_exp = new ArrayList<Card>();
         cards_exp.add(new Card(4, 7));
@@ -295,7 +293,6 @@ public class PokerTest extends TestCase {
     private void assertCardsArrays(List<Card> cards1, List<Card> cards2) {
         assertEquals(cards1.size(), cards2.size());
         for(int i = 0; i < cards1.size(); i ++) {
-//            println "${cards1.get(i)} ${cards2.get(i)}"
             assertEquals(cards1.get(i), cards2.get(i));
         }
     }

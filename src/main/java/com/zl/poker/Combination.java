@@ -16,7 +16,6 @@ class Combination implements Comparable {
 
 	public Combination(List<Card> cardsSet) {
 
-		// System.out.println("<>");
 		int pairs_cnt = 0;
 		int triples_cnt = 0;
 		int quad_cnt = 0;
@@ -60,26 +59,18 @@ class Combination implements Comparable {
 					for (int j = i + 1; j < cardsSet.size(); j++) {
 						if (cardsSet.get(i).getValue() == cardsSet.get(j)
 								.getValue()) {
-						// System.out.println("! " + cardsSet.get(i).getValue()
-						// + " " + cardsSet.get(j).getValue());
 							pairs[cardsSet.get(i).getValue()]++;
 						}
 						if (!isFlushExists
 								&& cardsSet.get(i).getSuit() == cardsSet.get(j)
 									.getSuit()) {
-						// System.out.println("! " + cardsSet.get(i).getSuit() +
-						// " " + cardsSet.get(j).getSuit());
-						// pairs[cardsSet.get(i).getValue()]++;
 							flush[cardsSet.get(i).getSuit()]++;
-						// System.out.println("flash_cnt = " +
-						// flash[cardsSet.get(i).getSuit()]);
 						}
 					}
 				}
 			}
 
 			for (int i = 14; i >= 2; i--) {
-				// System.out.println("? " + pairs[i] + " " + i);
 				switch (pairs[i]) {
 				case 1:
 					pairs_cnt++;
@@ -120,10 +111,8 @@ class Combination implements Comparable {
 			combinationType = CombinationType.FULL_HOUSE;
 		}
 
-		// System.out.println("CombinationType = " + combinationType);
 		if (combinationType.equals(CombinationType.HIGH_CARD)) {
 			for (int i = 0; i < flush.length; i++) {
-				// System.out.println("flash = " + flash[i]);
 				if (flush[i] > 3) {
 					combinationType = CombinationType.FLUSH;
 					for (int j = 0; j < cardsSet.size(); j++) {
@@ -200,7 +189,7 @@ class Combination implements Comparable {
 		for(int i = 0; i < cardsList.size() - 4; i++) {
 			List<List<Card>> straights = getStraightAtPosition(cardsList, i, aces);
 			for (List<Card> list : straights) {
-				if(list.size() == 4 || list.size() == 5) {
+				if(list.size() == 5) {
 					result.add(list);	
 				}
 			}
@@ -265,7 +254,10 @@ class Combination implements Comparable {
 				result.addAll(newAlternatives);
 				isStraight = true;
 				i++;
-				if(i - 2 > 0 && (cardsList.get(i - 2).getValue() - cardsList.get(i - 1).getValue() > 1)) {
+				int fn = aces.size() > 0 ? 1 : 0;
+				boolean isFinish = (5 - result.get(0).size() <= cardsList.size() - start - i + 1 + fn);
+				if(i - 2 > 0  && !isFinish && (cardsList.get(i - 2).getValue() - cardsList.get(i - 1).getValue() > 1) && 
+						(aces.size() == 0 || cardsList.get(i - 2).getValue() != 14)) {
 					break;
 				}	
 				// мы в последней позиции списка карт, может нужно добавить последнюю в стриты 
@@ -371,13 +363,6 @@ class Combination implements Comparable {
 			result = -1;
 		} else {
 			result = major1 - major2;
-//			if(minor1 == 10 || minor2 == 10) {
-//				if(minor1 == 10 && minor2 != 10) {
-//					result = 1;
-//				} else if(minor1 != 10 && minor2 == 10) {
-//					result = -1;
-//				}
-//			}
 			if(result == 0) {
 				// если флэш-стриты равны сравниваем по масти
 				result = cl1.get(0).getSuit() - cl2.get(0).getSuit();
