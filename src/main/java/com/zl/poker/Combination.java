@@ -183,7 +183,8 @@ class Combination implements Comparable {
 	public static List<List<Card>> getAllStraihgts(List<Card> cardsList, List<Card> aces) {
 		List<List<Card>> result = new ArrayList<List<Card>>();
 
-		for(int i = 0; i < cardsList.size() - 4; i++) {
+		int border = aces.size() > 0 ? 3 : 4; 
+		for(int i = 0; i < cardsList.size() - border; i++) {
 			List<List<Card>> straights = getStraightAtPosition(cardsList, i, aces);
 			for (List<Card> list : straights) {
 				if(list.size() == 5) {
@@ -199,108 +200,71 @@ class Combination implements Comparable {
 	 */
 	public static List<List<Card>> getStraightAtPosition(List<Card> cardsList,
 			int start, List<Card> aces) {
-		if (start > cardsList.size() - 5 || start < 0) {
-			throw new IllegalArgumentException(String.format(
-					"start index = %s ; cards list size = %s", start, cardsList
-							.size()));
-		}
-		boolean isStraight = false;
+		
+		int i = start + 1;
+		int cardsCount = 0;
+		
 		List<List<Card>> result = new ArrayList<List<Card>>();
-		result.add(new ArrayList<Card>());
-		int i = start;
-
-		while (i < start + 5 && i < cardsList.size()) {
-			int card1 = cardsList.get(i).getValue();
-			int card2 = cardsList.get(i + 1).getValue();
-
-			boolean isCurrentMoreByOneThanNext = card1 == card2 + 1;
-			boolean isCurrentEqualsNext = card1 == card2;
-			boolean isCurrentCardHasMoreThanOneFollowing = cardsList.size() > i + 1;
-			boolean isCurrentIsBrokenFirstButAceExists = (!isCurrentEqualsNext && i == start && aces.size() > 0 && cardsList.get(start + 4).getValue() == 2);
-
-			if (isCurrentMoreByOneThanNext || (isCurrentCardHasMoreThanOneFollowing && isCurrentEqualsNext)) {
+		
+		List<Card> first = new ArrayList<Card>();
+		first.add(cardsList.get(start));
+		result.add(first);
+		
+		while (i < cardsList.size() && cardsCount < 5) {
+			
+			int currentCard = cardsList.get(i).getValue();
+			int prevCard = cardsList.get(i - 1).getValue();
+			
+			if(prevCard == currentCard + 1) {
 				List<List<Card>> newAlternatives = new ArrayList<List<Card>>();
-				if(result.get(0).size() == 4) {
-					isStraight = true;
-				}
 				int ii = i;
 				for (List<Card> lc : result) {
-					// если встречаем две(или больше) одинаковые по рангу карты подряд, значит нужно разбить существующие
-					// стриты на варианты с этими картами
-					if (card1 == card2) {
-						int k = i + 1;
-						while(k < cardsList.size()) {
-							if (cardsList.get(i).getValue() == cardsList.get(k).getValue()) {
-								List<Card> newAlternative = new ArrayList<Card>();
-								newAlternative.addAll(lc);
-								newAlternative.add(cardsList.get(k));
-								newAlternatives.add(newAlternative);
-								k++;
-							} else {
-								break;
-							}
-						}	
-						lc.add(cardsList.get(i));
-						ii = k - 1;
-					} else {
-						lc.add(cardsList.get(i));
-					}
-				}
-				start+= ii - i;
-				i = ii;
-				result.addAll(newAlternatives);
-				isStraight = true;
-				i++;
-				int fn = aces.size() > 0 ? 1 : 0;
-				boolean isFinish = (5 - result.get(0).size() <= cardsList.size() - start - i + 1 + fn);
-				if(i - 2 > 0  && !isFinish && (cardsList.get(i - 2).getValue() - cardsList.get(i - 1).getValue() > 1) && 
-						(aces.size() == 0 || cardsList.get(i - 2).getValue() != 14)) {
-					break;
-				}	
-				// мы в последней позиции списка карт, может нужно добавить последнюю в стриты 
-				if(i + 1 == cardsList.size()) {
-					if(cardsList.get(i).getValue() + 1 == cardsList.get(i - 1).getValue()) {
-						for (List<Card> lc : result) {
-							lc.add(cardsList.get(i));
+					if(i < cardsList.size() - 1) {
+						int n = i + 1;
+						while(n < cardsList.size() && cardsList.get(n).getValue() == currentCard) {
+							List<Card> newAlternative = new ArrayList<Card>();
+							newAlternative.addAll(lc);
+							newAlternative.add(cardsList.get(n));
+							newAlternatives.add(newAlternative);
+							n++;
 						}
+						ii = n - 1;
 					}
-					break;
+					lc.add(cardsList.get(i));
 				}
+				result.addAll(newAlternatives);
+				cardsCount++;
+				i = ii > i ? ii : i;
 			} else {
-				// первая карта нарушает стрит, но может последняя - 2 и существует туз
-				if(isCurrentIsBrokenFirstButAceExists) {
-					i++;
-				} else {
-					isStraight = false;	
-					break;
-				}
+				break;
 			}
-		}
-		if(!isStraight) {
-			result.clear();
+			i++;
 		}
 		
-		// при необходимости нужно докинуть тузов в неполные стриты с младшей двойкой и 
-		// удалить неполные стриты из списка результатов
-		List<List<Card>> modified = new ArrayList<List<Card>>();
-		List<List<Card>> withAces = new ArrayList<List<Card>>();
-		for(Card ace : aces) {
-			for(List<Card> cl : result) {
-				if(cl.size() == 4 && cl.get(3).getValue() == 2) {
-					List<Card> newWithAces = new ArrayList<Card>();
-					newWithAces.addAll(cl);
-					newWithAces.add(ace);
-					Collections.sort(newWithAces);
-					withAces.add(newWithAces);
-					modified.add(cl);
-				}
+		List<List<Card>> toRemove = new ArrayList<List<Card>>();
+		List<List<Card>> withAces = new ArrayList<List<Card>>();						
+		for(List<Card> cl : result) {
+			if(cl.size() == 4) {
+				if (cl.get(3).getValue() == 2) {
+					for(Card ace : aces) {
+						List<Card> newWithAces = new ArrayList<Card>();
+						newWithAces.addAll(cl);
+						newWithAces.add(0, ace);
+						withAces.add(newWithAces);
+						toRemove.add(cl);
+					}
+				} else 
+					toRemove.add(cl);
+			} else if(cl.size() < 5) {
+				toRemove.add(cl);
 			}
 		}
-		result.removeAll(modified);
+		result.removeAll(toRemove);
 		result.addAll(withAces);
+
 		return result;
 	}
-
+	
 	/*
 	 * Принимает на вход два списка со стритами. Если первый больше, возвращается положительное значение, если меньше -
 	 * отрицательное. Если стриты равны то возвращается 0.

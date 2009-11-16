@@ -296,7 +296,7 @@ public class CombinationTest extends TestCase {
 		cards_exp2.add(new Card(4, 3));
 		cards_exp2.add(new Card(3, 2));
 		
-		List<List<Card>> exp_list = Combination.getStraightAtPosition(cards, 0, aces);
+		List<List<Card>> exp_list = Combination.getStraightAtPosition(cards, 1, aces);
 		assertEquals(2, exp_list.size());
 		assertCardsArrays(cards_exp1, exp_list.get(0));
 		assertCardsArrays(cards_exp2, exp_list.get(1));
@@ -324,16 +324,16 @@ public class CombinationTest extends TestCase {
 		cards_exp1.add(new Card(3, 2));
 
 		List<Card> cards_exp2 = new ArrayList<Card>();
-		cards_exp2.add(new Card(4, 14));
+		cards_exp2.add(new Card(3, 14));
 		cards_exp2.add(new Card(4, 5));
-		cards_exp2.add(new Card(2, 4));
+		cards_exp2.add(new Card(3, 4));
 		cards_exp2.add(new Card(4, 3));
 		cards_exp2.add(new Card(3, 2));
 
 		List<Card> cards_exp3 = new ArrayList<Card>();
-		cards_exp3.add(new Card(3, 14));
+		cards_exp3.add(new Card(4, 14));
 		cards_exp3.add(new Card(4, 5));
-		cards_exp3.add(new Card(3, 4));
+		cards_exp3.add(new Card(2, 4));
 		cards_exp3.add(new Card(4, 3));
 		cards_exp3.add(new Card(3, 2));
 
@@ -1276,6 +1276,32 @@ public class CombinationTest extends TestCase {
 		assertTrue(c1.compareTo(c2) < 0);
 		
 	}
+	public void testCompareCombinationsAdditionalTest1() {
+	
+		List<Card> cards_list1 = new ArrayList<Card>();
+		cards_list1.add(new Card(1,14));
+		cards_list1.add(new Card(2,13));
+		cards_list1.add(new Card(4,12));
+		cards_list1.add(new Card(2,12));
+		cards_list1.add(new Card(1,12));
+        cards_list1.add(new Card(4,4));
+        cards_list1.add(new Card(3,3));
+
+	    List<Card> cards_list2 = new ArrayList<Card>();
+	    cards_list2.add(new Card(2,2));
+	    cards_list2.add(new Card(4,5));
+	    cards_list2.add(new Card(2,11));
+	    cards_list2.add(new Card(3,7));
+	    cards_list2.add(new Card(2,8));
+        cards_list2.add(new Card(2,7));
+        cards_list2.add(new Card(1,7));
+
+	    Combination c1 = new Combination(cards_list1);
+	    Combination c2 = new Combination(cards_list2);
+	
+	    c1.compareTo(c2);
+	}
+    
 	
 	private void assertCardsArrays(List<Card> cards1, List<Card> cards2) {
 		assertEquals(cards1.size(), cards2.size());
