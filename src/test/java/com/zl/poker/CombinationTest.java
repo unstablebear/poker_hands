@@ -1332,6 +1332,38 @@ public class CombinationTest extends TestCase {
 		
 	}
 	
+	public void testCompareCombinationsAdditionalTest3() {
+
+		List<Card> cards_list1 = new ArrayList<Card>() {{ 
+			add(new Card(1, 11));
+			add(new Card(2, 10));
+			add(new Card(1, 10));
+			add(new Card(1, 10));
+			add(new Card(2, 9));
+			add(new Card(1, 9));
+			add(new Card(2, 8));
+			add(new Card(3, 4));
+			add(new Card(1, 4));
+		}};
+		
+		List<Card> cards_list2 = new ArrayList<Card>() {{ 
+			add(new Card(3, 12));
+			add(new Card(3, 12));
+			add(new Card(1, 11));
+			add(new Card(3, 10));
+			add(new Card(2, 10));
+			add(new Card(2, 10));
+			add(new Card(1, 9));
+			add(new Card(3, 8));
+			add(new Card(2, 7));
+		}};
+
+		Combination c1 = new Combination(cards_list1);
+		Combination c2 = new Combination(cards_list2);
+
+		c1.compareTo(c2);
+		
+	}	
 	private void assertCardsArrays(List<Card> cards1, List<Card> cards2) {
 		assertEquals(cards1.size(), cards2.size());
 		for (int i = 0; i < cards1.size(); i++) {

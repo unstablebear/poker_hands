@@ -52,6 +52,9 @@ class Combination implements Comparable {
 		}
 		
 		// Pairs, Triplets, Quads ?
+		List<Card> pairz = new ArrayList<Card>();
+		List<Card> triples = new ArrayList<Card>();
+		List<Card> quads = new ArrayList<Card>();		
 		if(combinationType.val < CombinationType.QUAD.val) {
 			for (int i = 0; i < cardsSet.size(); i++) {
 				boolean isFlushExists = flush[cardsSet.get(i).getSuit()] > 0;
@@ -73,47 +76,86 @@ class Combination implements Comparable {
 			for (int i = 14; i >= 2; i--) {
 				switch (pairs[i]) {
 				case 1:
+					for (Card card : cardsSet) {
+						if(card.getValue() == i)
+							pairz.add(card);
+					}
 					pairs_cnt++;
 					break;
 				case 2:
+					for (Card card : cardsSet) {
+						if(card.getValue() == i)
+							triples.add(card);
+					}
 					triples_cnt++;
 					break;
 				case 3:
+					for (Card card : cardsSet) {
+						if(card.getValue() == i)
+							quads.add(card);
+					}
 					quad_cnt++;
 					break;
 				default:
 					continue;
 				}
-				for (int j = 0; j < cardsSet.size(); j++) {
-					if (cardsSet.get(j).getValue() == i) {
-						cards.add(cardsSet.get(j));
-					}
-				}
+//				for (int j = 0; j < cardsSet.size(); j++) {
+//					if (cardsSet.get(j).getValue() == i) {
+//						cards.add(cardsSet.get(j));
+//					}
+//				}
 				if ((triples_cnt > 0 && pairs_cnt > 0) || quad_cnt > 0)
 					break;
 			}
 	
 			if (quad_cnt == 1 && combinationType.val < combinationType.QUAD.val) {
+				cards.clear();
+				Collections.sort(quads);
+				cards.add(quads.get(0));
+				cards.add(quads.get(1));
+				cards.add(quads.get(2));
+				cards.add(quads.get(3));
 				combinationType = CombinationType.QUAD;
+			} else if (pairs_cnt > 0 && triples_cnt > 0 && combinationType.val < combinationType.FULL_HOUSE.val) {
+				cards.clear();
+				Collections.sort(triples);
+				cards.add(triples.get(0));
+				cards.add(triples.get(1));
+				cards.add(triples.get(2));
+				Collections.sort(pairz);
+				cards.add(pairz.get(0));
+				cards.add(pairz.get(1));			
+				combinationType = CombinationType.FULL_HOUSE;
 			} else if (triples_cnt == 1 && combinationType.val < combinationType.TRIPLE.val) {
+				cards.clear();
+				Collections.sort(triples);
+				cards.add(triples.get(0));
+				cards.add(triples.get(1));
+				cards.add(triples.get(2));
 				combinationType = CombinationType.TRIPLE;
-			} else if (pairs_cnt == 1 && combinationType.val < combinationType.PAIR.val) {
-				combinationType = CombinationType.PAIR;
 			} else if (pairs_cnt == 2 && combinationType.val < combinationType.DOUBLE_PAIR.val) {
+				cards.clear();
+				Collections.sort(pairz);
+				cards.add(pairz.get(0));
+				cards.add(pairz.get(1));
+				cards.add(pairz.get(2));
+				cards.add(pairz.get(3));
 				combinationType = CombinationType.DOUBLE_PAIR;
+			} else if (pairs_cnt == 1 && combinationType.val < combinationType.PAIR.val) {
+				cards.clear();
+				Collections.sort(pairz);
+				cards.add(pairz.get(0));
+				cards.add(pairz.get(1));
+				combinationType = CombinationType.PAIR;
 			}
 		}
 		
 		// проверка на full house
-		if (combinationType.val > 0
-				&& combinationType.val < CombinationType.FULL_HOUSE.val
-				&& pairs_cnt > 0 && triples_cnt > 0) {
-			combinationType = CombinationType.FULL_HOUSE;
-		}
-
+		
 		if (combinationType.equals(CombinationType.HIGH_CARD) || combinationType.equals(CombinationType.STRAIGHT)) {
 			for (int i = 0; i < flush.length; i++) {
 				if (flush[i] > 3) {
+					cards.clear();
 					combinationType = CombinationType.FLUSH;
 					for (int j = 0; j < cardsSet.size(); j++) {
 						if (cardsSet.get(j).getSuit() == flush[i]) {
@@ -388,5 +430,5 @@ class Combination implements Comparable {
 		}
 		return result;
 	}
-	
+
 }

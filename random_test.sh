@@ -1,0 +1,1 @@
+java -cp target/poker-1.0-SNAPSHOT.jar com.zl.poker.RandomTest
