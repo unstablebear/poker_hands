@@ -93,13 +93,13 @@ class Combination implements Comparable {
 					break;
 			}
 	
-			if (quad_cnt == 1) {
+			if (quad_cnt == 1 && combinationType.val < combinationType.QUAD.val) {
 				combinationType = CombinationType.QUAD;
-			} else if (triples_cnt == 1) {
+			} else if (triples_cnt == 1 && combinationType.val < combinationType.TRIPLE.val) {
 				combinationType = CombinationType.TRIPLE;
-			} else if (pairs_cnt == 1) {
+			} else if (pairs_cnt == 1 && combinationType.val < combinationType.PAIR.val) {
 				combinationType = CombinationType.PAIR;
-			} else if (pairs_cnt == 2) {
+			} else if (pairs_cnt == 2 && combinationType.val < combinationType.DOUBLE_PAIR.val) {
 				combinationType = CombinationType.DOUBLE_PAIR;
 			}
 		}
@@ -111,7 +111,7 @@ class Combination implements Comparable {
 			combinationType = CombinationType.FULL_HOUSE;
 		}
 
-		if (combinationType.equals(CombinationType.HIGH_CARD)) {
+		if (combinationType.equals(CombinationType.HIGH_CARD) || combinationType.equals(CombinationType.STRAIGHT)) {
 			for (int i = 0; i < flush.length; i++) {
 				if (flush[i] > 3) {
 					combinationType = CombinationType.FLUSH;
